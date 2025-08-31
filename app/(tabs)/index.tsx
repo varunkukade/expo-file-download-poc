@@ -1,64 +1,109 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { Image } from "expo-image";
+import { Button, StyleSheet } from "react-native";
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import ParallaxScrollView from "@/components/ParallaxScrollView";
+import { downloadFiles } from "@/utils/download-file";
+import { handleNotificationPermission } from "@/utils/notification-permission";
+
+const getToken = () => {
+  return "kuudwukudwkudwkukwuudwkukwdkdw";
+};
 
 export default function HomeScreen() {
+  const getHeaders = () => {
+    const headers: Record<string, string> = {};
+    const token = getToken();
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+    return headers;
+  };
+
+  const downloadSingleFile = async () => {
+    handleNotificationPermission(() => {
+      const files = [
+        {
+          url: "https://s24.q4cdn.com/216390268/files/doc_downloads/test.pdf",
+          filename: "test.pdf",
+        },
+      ];
+      downloadFiles(files);
+    });
+  };
+
+  const downloadMultipleFiles = async () => {
+    handleNotificationPermission(() => {
+      const files = [
+        {
+          url: "https://mmatechnical.com/Download/Download-Test-File/(MMA)-100MB.zip",
+          filename: "100mb.zip",
+        },
+        {
+          url: "https://mmatechnical.com/Download/Download-Test-File/(MMA)-1GB.zip",
+          filename: "1gb.zip",
+        },
+        {
+          url: "https://s24.q4cdn.com/216390268/files/doc_downloads/test.pdf",
+          filename: "test.pdf",
+        },
+        {
+          url: "https://www.adobe.com/support/products/enterprise/knowledgecenter/media/c4611_sample_explain.pdf",
+          filename: "adobe.pdf",
+        },
+        {
+          url: "https://www.aeee.in/wp-content/uploads/2020/08/Sample-pdf.pdf",
+          filename: "aeee.pdf",
+        },
+        {
+          url: "https://www.archlou.org/wp-content/uploads/2019/02/HyperlinkTest.pdf",
+          filename: "archlou.pdf",
+        },
+        {
+          url: "https://ontheline.trincoll.edu/images/bookdown/sample-local-pdf.pdf",
+          filename: "ontheline.pdf",
+        },
+      ];
+      downloadFiles(files);
+    });
+  };
+
+  const downloadAuthenticatedFile = async () => {
+    handleNotificationPermission(() => {
+      const files = [
+        {
+          url: "https://s24.q4cdn.com/216390268/files/doc_downloads/test.pdf",
+          filename: "test.pdf",
+          headers: getHeaders(),
+        },
+      ];
+      downloadFiles(files);
+    });
+  };
+
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
+      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
       headerImage={
         <Image
-          source={require('@/assets/images/partial-react-logo.png')}
+          source={require("@/assets/images/partial-react-logo.png")}
           style={styles.reactLogo}
         />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
+      }
+    >
+      <Button title="Download Single File" onPress={downloadSingleFile} />
+      <Button title="Download Multiple Files" onPress={downloadMultipleFiles} />
+      <Button
+        title="Download authenticated file"
+        onPress={downloadAuthenticatedFile}
+      />
     </ParallaxScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 8,
   },
   stepContainer: {
@@ -70,6 +115,6 @@ const styles = StyleSheet.create({
     width: 290,
     bottom: 0,
     left: 0,
-    position: 'absolute',
+    position: "absolute",
   },
 });
