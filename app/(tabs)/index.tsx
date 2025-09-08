@@ -3,6 +3,7 @@ import { Button, StyleSheet } from "react-native";
 
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { downloadFiles } from "@/utils/download-file";
+import { getFreeDiskStorage, getRemoteFileSize } from "@/utils/file-system";
 import { handleNotificationPermission } from "@/utils/notification-permission";
 
 const getToken = () => {
@@ -34,34 +35,43 @@ export default function HomeScreen() {
   const downloadMultipleFiles = async () => {
     handleNotificationPermission(() => {
       const files = [
+        // {
+        //   url: "https://mmatechnical.com/Download/Download-Test-File/(MMA)-100MB.zip",
+        //   filename: "100mb.zip",
+        // },
+        // {
+        //   url: "https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-large-zip-file.zip",
+        //   filename: "large.zip",
+        // },
+        // {
+        //   url: "https://mmatechnical.com/Download/Download-Test-File/(MMA)-1GB.zip",
+        //   filename: "1gb.zip",
+        // },
         {
-          url: "https://mmatechnical.com/Download/Download-Test-File/(MMA)-100MB.zip",
-          filename: "100mb.zip",
-        },
-        {
-          url: "https://mmatechnical.com/Download/Download-Test-File/(MMA)-1GB.zip",
-          filename: "1gb.zip",
+          url: "https://ash-speed.hetzner.com/10GB.bin",
+          filename: "10gb.bin",
+          size: 10 * 1024 * 1024 * 1024,
         },
         {
           url: "https://s24.q4cdn.com/216390268/files/doc_downloads/test.pdf",
           filename: "test.pdf",
         },
-        {
-          url: "https://www.adobe.com/support/products/enterprise/knowledgecenter/media/c4611_sample_explain.pdf",
-          filename: "adobe.pdf",
-        },
-        {
-          url: "https://www.aeee.in/wp-content/uploads/2020/08/Sample-pdf.pdf",
-          filename: "aeee.pdf",
-        },
-        {
-          url: "https://www.archlou.org/wp-content/uploads/2019/02/HyperlinkTest.pdf",
-          filename: "archlou.pdf",
-        },
-        {
-          url: "https://ontheline.trincoll.edu/images/bookdown/sample-local-pdf.pdf",
-          filename: "ontheline.pdf",
-        },
+        // {
+        //   url: "https://www.adobe.com/support/products/enterprise/knowledgecenter/media/c4611_sample_explain.pdf",
+        //   filename: "adobe.pdf",
+        // },
+        // {
+        //   url: "https://www.aeee.in/wp-content/uploads/2020/08/Sample-pdf.pdf",
+        //   filename: "aeee.pdf",
+        // },
+        // {
+        //   url: "https://www.archlou.org/wp-content/uploads/2019/02/HyperlinkTest.pdf",
+        //   filename: "archlou.pdf",
+        // },
+        // {
+        //   url: "https://ontheline.trincoll.edu/images/bookdown/sample-local-pdf.pdf",
+        //   filename: "ontheline.pdf",
+        // },
       ];
       downloadFiles(files);
     });
@@ -95,6 +105,22 @@ export default function HomeScreen() {
       <Button
         title="Download authenticated file"
         onPress={downloadAuthenticatedFile}
+      />
+      <Button
+        title="Get Free Disk Storage"
+        onPress={async () => {
+          const freeDiskStorage = await getFreeDiskStorage();
+          console.log("Free Disk Storage", freeDiskStorage);
+        }}
+      />
+      <Button
+        title="Get Remote File Size"
+        onPress={async () => {
+          const remoteFileSize = await getRemoteFileSize(
+            "https://s24.q4cdn.com/216390268/files/doc_downloads/test.pdf"
+          );
+          console.log("Remote File Size", remoteFileSize);
+        }}
       />
     </ParallaxScrollView>
   );

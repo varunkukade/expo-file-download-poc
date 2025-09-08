@@ -8,3 +8,14 @@ export function truncate(name: string, maxLength: number = 40) {
 
   return `${start}...${end}${ext}`;
 }
+
+export function splitFileName(filename: string) {
+  const dotIndex = filename.lastIndexOf(".");
+  if (dotIndex === -1) {
+    return { name: filename, extension: "" };
+  }
+  return {
+    name: filename.substring(0, dotIndex),
+    extension: filename.substring(dotIndex),
+  };
+}
